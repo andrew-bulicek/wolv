@@ -58,13 +58,20 @@ echo -e "\nWhich format do you want?";
 echo -e "\033[2m(Generally 251 or 22 are best)\033[0m";
 read -p "> " format;
 
-# Opus converstion to mp3
+# Opus conversion to mp3
 if [ "$format" == "251" ]
 then
   youtube-dl -xf "$format" -o "$filename"".%(ext)s" "$url";
   ffmpeg -hide_banner -loglevel 0 -stats -y -i "$filename".opus -c:a libmp3lame -abr 1 -b:a 320k "$filename".mp3;
   # ffmpeg -i "$filename".opus -c:a libfdk_aac -vbr 5 -cutoff 18000 "$filename".m4a;
   rm "$filename".opus;
+
+# Vorbis conversion to mp3
+elif [ "$format" == "171" ]
+then
+  youtube-dl -xf "$format" -o "$filename"".%(ext)s" "$url";
+  ffmpeg -hide_banner -loglevel 0 -stats -y -i "$filename".ogg -c:a libmp3lame -abr 1 -b:a 320k "$filename".mp3;
+  rm "$filename".ogg;
 
 # All other formats
 else
